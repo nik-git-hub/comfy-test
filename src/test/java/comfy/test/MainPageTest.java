@@ -1,23 +1,34 @@
 package comfy.test;
 
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Test;
+import com.codeborne.selenide.SelenideElement;
+import comfy.page.MainPage;
+import comfy.page.SearchResultPage;
+import org.junit.jupiter.api.*;
 import org.openqa.selenium.By;
-import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 import static com.codeborne.selenide.Selenide.*;
+import static com.codeborne.selenide.WebDriverRunner.url;
 
 public class MainPageTest {
 
     private static final Logger LOG = LoggerFactory.getLogger(MainPageTest.class);
+    private static String url;
+    private static MainPage mainPage;
 
     @BeforeAll
     static void setUp() {
-        open("https://comfy.ua");
+        url = "https://comfy.ua";
+        mainPage = new MainPage();
+    }
+
+    @BeforeEach
+    void openPage() {
+        open(url);
     }
 
     @AfterEach
@@ -28,25 +39,108 @@ public class MainPageTest {
     @Test
     void shouldReturnItem() {
         String searchItem = "xiaomi";
-        LOG.info("starting search of page by request: [{}]", searchItem);
 
-        $("#searchTop").setValue(searchItem).pressEnter();
-
-        Wait().until(ExpectedConditions.visibilityOfAllElementsLocatedBy(By.className("brand__title")));
-
-        Assertions.assertTrue($(By.className("brand__title")).text().toUpperCase().contains(searchItem.toUpperCase()));
-        LOG.info("end search of page by request: [{}]", searchItem);
-
+        LOG.info("start: search Item: [{}]", searchItem);
+        SearchResultPage resultPage = mainPage.search(searchItem);
+        resultPage.open();
+        Assertions.assertTrue(resultPage.getResultItems().toUpperCase().contains(searchItem.toUpperCase()));
+        LOG.info("end: search Item: [{}]", searchItem);
     }
 
     @Test
-    void shouldSearch() {
-        LOG.info("search element");
-        String searchString = "samsung";
-        $("#searchTop").setValue(searchString).pressEnter();
-
-        Assertions.assertEquals("samsung", searchString);
-
+    void shouldBeUrlisCorrect() {
+        LOG.info("start: checking: url is correct");
+        Assertions.assertTrue(url().contains(url));
+        LOG.info("end: checking url");
     }
 
+    @Test
+    void shouldBeVisibleGoodsList() {
+        LOG.info("start: checking: goods list is displayed");
+        SelenideElement container = $("#menuContainer");
+        Assertions.assertTrue(container.isDisplayed());
+        LOG.info("end: checking: goods list is displayed");
+    }
+
+    @Test
+    void shouldBeFooterOfContacts() {
+
+        String searchElement = "Контакты";
+        int index = 1;
+
+        LOG.info("start: search of link: [{}]", searchElement);
+        List<String> list = $(By.className("footer-navigation")).
+                $("div:nth-child(" + index + ")").findAll(By.className("list__item")).texts();
+        Assertions.assertTrue(list.contains(searchElement));
+        LOG.info("end: search of link: [{}]", searchElement);
+    }
+
+    @Test
+    void shouldBeFooterOfServices() {
+
+        String searchElement = "IT-сервис";
+        int index = 2;
+
+        LOG.info("start: search of link: [{}]", searchElement);
+        List<String> list = $(By.className("footer-navigation")).
+                $("div:nth-child(" + index + ")").findAll(By.className("list__item")).texts();
+        Assertions.assertTrue(list.contains(searchElement));
+        LOG.info("end: search of link: [{}]", searchElement);
+    }
+
+    @Test
+    void shouldBeFooterHelpForCustomers() {
+
+        String searchElement = "Обмен и возврат товара";
+        int index = 3;
+
+        LOG.info("start: search of link: [{}]", searchElement);
+        List<String> list = $(By.className("footer-navigation")).
+                $("div:nth-child(" + index + ")").findAll(By.className("list__item")).texts();
+
+        Assertions.assertTrue(list.contains(searchElement));
+        LOG.info("end: search of link: [{}]", searchElement);
+    }
+
+    @Test
+    void shouldBeLogoBrands() {
+        LOG.info("start: checking: is LogoBrands ");
+        List<SelenideElement> logo = $(By.className("logobrands-inner")).findAll(By.className("link-img"));
+        Assertions.assertEquals(6, logo.size());
+        LOG.info("end: checking LogoBrands");
+    }
+
+    @Test
+    void shouldBeVisibleHeaderLinks() {
+        LOG.info("start: checking: is header links");
+        List<SelenideElement> headerLinks = $("#headerLinks")
+                .findAll(By.className("header-links__link"));
+        Assertions.assertEquals(7, headerLinks.size());
+        LOG.info("end: checking header links");
+    }
+
+    @Test
+    void shouldBeHeaderShops() {
+        String searchElement = "Магазины";
+
+        LOG.info("start: search of link: [{}]", searchElement);
+        List<SelenideElement> headerLinks = $("#headerLinks").$$(By.tagName("span"));
+        List<String> links = headerLinks.stream().map(link -> link.getAttribute("data-lbl"))
+                .collect(Collectors.toList());
+        Assertions.assertTrue(links.contains(searchElement));
+        LOG.info("end: search of link: [{}]", searchElement);
+    }
+
+    @Test
+    void shouldBeHeaderFindOrder() {
+        String searchElement = "Найти заказ";
+
+        LOG.info("start: search of link: [{}]", searchElement);
+        List<SelenideElement> headerLinks = $("#headerLinks").$$(By.tagName("span"));
+        List<String> links = headerLinks.stream().map(link -> link.getAttribute("data-lbl"))
+                .collect(Collectors.toList());
+        Assertions.assertTrue(links.contains(searchElement));
+        LOG.info("end: search of link: [{}]", searchElement);
+    }
 }
+

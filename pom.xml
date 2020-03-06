@@ -18,6 +18,7 @@
         <selenide.version>5.6.0</selenide.version>
         <slf4j.api.version>1.7.28</slf4j.api.version>
         <slf4j.log4j12.version>1.7.28</slf4j.log4j12.version>
+        <maven-surefire-plugin>3.0.0-M4</maven-surefire-plugin>
     </properties>
 
     <dependencies>
@@ -61,7 +62,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
-                <version>3.0.0-M4</version>
+                <version>${maven-surefire-plugin}</version>
                 <configuration>
                     <includes>
                         <include>**/*MainPageTest.java</include>

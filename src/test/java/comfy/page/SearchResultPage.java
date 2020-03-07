@@ -10,12 +10,17 @@ import static com.codeborne.selenide.Selenide.Wait;
 
 public class SearchResultPage {
     private List<String> resultList;
+    private int amountElements;
 
     public SearchResultPage() {
     }
 
     public SearchResultPage(List<String> list) {
         this.resultList = list;
+    }
+
+    public SearchResultPage(int amount) {
+        this.amountElements = amount;
     }
 
     public String getResultItems() {
@@ -26,13 +31,11 @@ public class SearchResultPage {
         Wait().until(ExpectedConditions.visibilityOfAllElementsLocatedBy(By.className("brand__title")));
     }
 
-    public SearchResultPage searchFooterElement(int index) {
-        List<String> searchList = $(By.className("footer-navigation")).
-                $("div:nth-child(" + index + ")").findAll(By.className("list__item")).texts();
-        return new SearchResultPage(searchList);
-    }
-
     public List<String> getResultList() {
         return resultList;
+    }
+
+    public int getAmountElements() {
+        return amountElements;
     }
 }

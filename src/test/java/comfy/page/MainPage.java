@@ -15,7 +15,19 @@ public class MainPage {
     }
 
     public SearchResultPage searchFooterElement(int index) {
-        return new SearchResultPage().searchFooterElement(index);
+        return searchField.searchFooterElement(index);
+    }
+
+    public SearchResultPage searchLogoBrands() {
+        return searchField.searchLogoBrands();
+    }
+
+    public SearchResultPage searchHeaderLinks() {
+        return searchField.searchHeaderLinks();
+    }
+
+    public SearchResultPage searchHeaderElements() {
+        return searchField.searchHeaderElements();
     }
 
 }

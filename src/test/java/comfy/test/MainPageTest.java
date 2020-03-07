@@ -66,12 +66,10 @@ public class MainPageTest {
     void shouldBeFooterOfContacts() {
 
         String searchElement = "Контакты";
-        int index = 1;
+        SearchResultPage resultPage = mainPage.searchFooterElement(1);
 
         LOG.info("start: search of link: [{}]", searchElement);
-        List<String> list = $(By.className("footer-navigation")).
-                $("div:nth-child(" + index + ")").findAll(By.className("list__item")).texts();
-        Assertions.assertTrue(list.contains(searchElement));
+        Assertions.assertTrue(resultPage.getResultList().contains(searchElement));
         LOG.info("end: search of link: [{}]", searchElement);
     }
 
@@ -79,12 +77,10 @@ public class MainPageTest {
     void shouldBeFooterOfServices() {
 
         String searchElement = "IT-сервис";
-        int index = 2;
+        SearchResultPage resultPage = mainPage.searchFooterElement(2);
 
         LOG.info("start: search of link: [{}]", searchElement);
-        List<String> list = $(By.className("footer-navigation")).
-                $("div:nth-child(" + index + ")").findAll(By.className("list__item")).texts();
-        Assertions.assertTrue(list.contains(searchElement));
+        Assertions.assertTrue(resultPage.getResultList().contains(searchElement));
         LOG.info("end: search of link: [{}]", searchElement);
     }
 
@@ -92,13 +88,10 @@ public class MainPageTest {
     void shouldBeFooterHelpForCustomers() {
 
         String searchElement = "Обмен и возврат товара";
-        int index = 3;
+        SearchResultPage resultPage = mainPage.searchFooterElement(3);
 
         LOG.info("start: search of link: [{}]", searchElement);
-        List<String> list = $(By.className("footer-navigation")).
-                $("div:nth-child(" + index + ")").findAll(By.className("list__item")).texts();
-
-        Assertions.assertTrue(list.contains(searchElement));
+        Assertions.assertTrue(resultPage.getResultList().contains(searchElement));
         LOG.info("end: search of link: [{}]", searchElement);
     }
 
@@ -111,7 +104,7 @@ public class MainPageTest {
     }
 
     @Test
-    void shouldBeVisibleHeaderLinks() {
+    void shouldBeHeaderLinks() {
         LOG.info("start: checking: is header links");
         List<SelenideElement> headerLinks = $("#headerLinks")
                 .findAll(By.className("header-links__link"));
